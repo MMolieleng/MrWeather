@@ -2,9 +2,6 @@
 
 Location based weather app. 
 
-## Screenshots
-|![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
-
 ## Installation
 
 Clone the project using Android Studio 3.3.1(latest android studio version)
@@ -18,4 +15,5 @@ Clone the project using Android Studio 3.3.1(latest android studio version)
 
 ## Approach
 
-
+## Screenshots
+|![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
