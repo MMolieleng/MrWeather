@@ -3,8 +3,7 @@
 Location based weather app. 
 
 ## Screenshots
-![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) 
-![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) 
+|![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
 
 ## Installation
 
