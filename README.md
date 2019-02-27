@@ -19,6 +19,7 @@ In this project I used MVVM design pattern to implement my solution. Because of 
 * Show user's location (city)
 * Display weather icons provided by the api using Glide or Picasso library
 * Add some animations to make the app fun to use
+* Add UI tests using Expresso library
 
 ## Screenshots
 |![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
