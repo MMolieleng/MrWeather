@@ -13,7 +13,7 @@ Clone the project using Android Studio 3.3.1(latest android studio version)
 4. JUnit for unit testing
 
 ## Approach
-In this project I use MVVM design pattern to implement my solution. Because of limitted number of icon assets i was give, I used sun icon to indicate Sunny days and used partly cloudy icon to indicate rainy days in the forecast list.
+In this project I used MVVM design pattern to implement my solution. Because of limitted number of icon assets i was given, I used the sun icon to indicate Sunny days and used the partly cloudy icon to indicate rainy and cloudy days in the forecast list.
 
 ## Possible Improvements
 * Show user's location (city)
