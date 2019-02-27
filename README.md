@@ -3,7 +3,7 @@
 Location based weather app. 
 
 ## App Installation
-[1]https://github.com/MMolieleng/MrWeather/tree/master/app/release "APK File"
+[1]https://github.com/MMolieleng/MrWeather/tree/master/app/release/app-release.apk "APK File"
 
 ## Source code
 Clone the project using Android Studio 3.3.1(latest android studio version)
