@@ -13,13 +13,14 @@ Clone the project using Android Studio 3.3.1(latest android studio version)
 4. JUnit for unit testing
 
 ## Approach
-In this project I used MVVM design pattern to implement my solution. The choice of using MVVM was based on the fact that it is easy to write testable code with it, and it's ability of acitity/fragment lifecycle awareness. Because of limitted number of icon assets i was given, I used the sun icon to indicate Sunny days and used the partly cloudy icon to indicate rainy and cloudy days in the forecast list.
+In this project I used MVVM design pattern to implement my solution. The choice of using MVVM was based on the fact that it is easy to write testable code with it, and it's ability of Acitity and Fragment lifecycle wareness. Because of limitted number of icon assets i was given, I used the sun icon to indicate Sunny days and used the partly cloudy icon to indicate rainy and cloudy days in the forecast list.
 
 ## Possible Improvements
 * Show user's location (city)
 * Display weather icons provided by the api using Glide or Picasso library
 * Add some animations to make the app fun to use
 * Add UI tests using Expresso library
+* Add landscap UI and Tablet UI
 
 ## Screenshots
 |![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
