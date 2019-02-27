@@ -2,27 +2,27 @@ package com.interview.mrweather.models;
 
 public class DeviceLocation {
 
-    private String deviceLatitude;
-    private String deviceLongitude;
+    private double deviceLatitude;
+    private double deviceLongitude;
 
-    public DeviceLocation(String deviceLatitude, String deviceLongitude) {
+    public DeviceLocation(double deviceLatitude, double deviceLongitude) {
         this.deviceLatitude = deviceLatitude;
         this.deviceLongitude = deviceLongitude;
     }
 
-    public String getDeviceLatitude() {
+    public double getDeviceLatitude() {
         return deviceLatitude;
     }
 
-    public void setDeviceLatitude(String deviceLatitude) {
+    public void setDeviceLatitude(double deviceLatitude) {
         this.deviceLatitude = deviceLatitude;
     }
 
-    public String getDeviceLongitude() {
+    public double getDeviceLongitude() {
         return deviceLongitude;
     }
 
-    public void setDeviceLongitude(String deviceLongitude) {
+    public void setDeviceLongitude(double deviceLongitude) {
         this.deviceLongitude = deviceLongitude;
     }
 }

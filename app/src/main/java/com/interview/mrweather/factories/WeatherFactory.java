@@ -113,6 +113,6 @@ public class WeatherFactory {
 
         LocalDate localDate = LocalDate.parse(currentDay.split(" ")[0]);
         String [] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday", "Sunday"};
-        return new DailyWeather(days[localDate.getDayOfWeek()], weather.getTemperature(), icon);
+        return new DailyWeather(days[localDate.getDayOfWeek() % days.length], weather.getTemperature(), icon);
     }
 }

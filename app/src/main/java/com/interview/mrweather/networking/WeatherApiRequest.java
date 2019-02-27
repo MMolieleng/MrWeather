@@ -26,8 +26,8 @@ public class WeatherApiRequest {
 
     private Request getRequestWithCommonHeaders(HttpUrl.Builder urlBuilder, DeviceLocation deviceLocation) {
 
-        urlBuilder.addQueryParameter("lat", deviceLocation.getDeviceLatitude());
-        urlBuilder.addQueryParameter("lon", deviceLocation.getDeviceLongitude());
+        urlBuilder.addQueryParameter("lat", String.valueOf(deviceLocation.getDeviceLatitude()));
+        urlBuilder.addQueryParameter("lon", String.valueOf(deviceLocation.getDeviceLongitude()));
         urlBuilder.addQueryParameter("units", TEMPERATURE_UNITS);
         urlBuilder.addQueryParameter("appid", API_KEY);
         String URL = urlBuilder.build().toString();

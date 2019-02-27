@@ -8,6 +8,7 @@
     android:focusableInTouchMode="true"
     android:fitsSystemWindows="false"
     tools:context=".MainActivity"
+    android:background="@color/colorSunny"
     android:id="@+id/parentScrollView">
 
     <android.support.constraint.ConstraintLayout

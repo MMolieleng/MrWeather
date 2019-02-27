@@ -1,8 +1,18 @@
 package com.interview.mrweather;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,14 +27,15 @@ import android.widget.Toast;
 
 import com.interview.mrweather.adapters.DailyForecastAdapter;
 import com.interview.mrweather.models.DailyWeather;
+import com.interview.mrweather.models.DeviceLocation;
 import com.interview.mrweather.models.Weather;
+import com.interview.mrweather.viewmodels.CurrentLocationListener;
 import com.interview.mrweather.viewmodels.DailyForecastViewModel;
 import com.interview.mrweather.viewmodels.WeatherViewModel;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private List<DailyWeather> dailyWeatherList;
 
     private ScrollView scrollView;
+    private static DeviceLocation DEVICE_LOCATION = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +66,24 @@ public class MainActivity extends AppCompatActivity {
 
         dailyWeatherList = new ArrayList<>();
         enableFullScreen();
-        initUIComponents();
-        initViewModel();
-        updateUI();
+        if (isOnline()) {
+            initUtils();
+            initUIComponents();
+            initViewModel();
+            updateUI();
+        }
     }
 
     public void enableFullScreen() {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     private void initUIComponents() {
@@ -94,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
 
-        weatherVM.getWeather().observe(this, weather -> {
+        weatherVM.getWeather(DEVICE_LOCATION).observe(this, weather -> {
             Log.i(TAG, "updateUI: ");
             if (weather != null) {
                 updateTheme(weather);
@@ -103,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        forecastVM.getDailyWeatherForecast().observe(this, tmpDailyWeatherList -> {
+        forecastVM.getDailyWeatherForecast(DEVICE_LOCATION).observe(this, tmpDailyWeatherList -> {
             if (tmpDailyWeatherList.size() > 0) {
                 // Initialize Adapter
                 dailyWeatherList.clear();
@@ -121,11 +143,13 @@ public class MainActivity extends AppCompatActivity {
             case "Thunderstorm":
                 imgHeader.setImageResource(R.drawable.forest_rainy);
                 parentLayout.setBackgroundResource(R.color.colorRainy);
+                scrollView.setBackgroundResource(R.color.colorRainy);
                 break;
             case "Clouds":
             case "Snow":
                 imgHeader.setImageResource(R.drawable.forest_cloudy);
                 parentLayout.setBackgroundResource(R.color.colorCloudy);
+                scrollView.setBackgroundResource(R.color.colorCloudy);
                 break;
             case "Clear":
                 imgHeader.setImageResource(R.drawable.forest_sunny);
@@ -134,19 +158,15 @@ public class MainActivity extends AppCompatActivity {
             default:
                 imgHeader.setImageResource(R.drawable.forest_sunny);
                 parentLayout.setBackgroundResource(R.color.colorSunny);
+                scrollView.setBackgroundResource(R.color.colorSunny);
                 break;
         }
     }
 
     // I have added animation for the main temperature textview
     public void updateMainTemperatureDisplay(String tmpString) {
-
-        int temperature = (int) Integer.parseInt(tmpString);
-        ValueAnimator animator = new ValueAnimator();
-        animator.setObjectValues(0, temperature);
-        animator.addUpdateListener(animation -> tvMainTemperature.setText(String.valueOf(animation.getAnimatedValue()) + "°"));
-        animator.setDuration(1500);
-        animator.start();
+        if (tmpString != null)
+            tvMainTemperature.setText(tmpString+"°");
     }
 
     public void updateOtherViews(Weather weather) {
@@ -168,5 +188,51 @@ public class MainActivity extends AppCompatActivity {
             default:
                 tvMainStatus.setText(weather.getMain());
         }
+    }
+
+    public void initUtils() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION}, 1000);
+        } else {
+            getLocationUpdates();
+        }
+    }
+
+    private void getLocationUpdates() {
+        CurrentLocationListener.getInstance(getApplicationContext()).observe(this, new Observer<Location>() {
+            @Override
+            public void onChanged(@Nullable Location location) {
+                if (location != null) {
+                    Log.d(MainActivity.class.getSimpleName(),
+                            "Location Changed " + location.getLatitude() + " : " + location.getLongitude());
+//                    Toast.makeText(MainActivity.this, "Location Changed", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onChanged:");
+                    MainActivity.DEVICE_LOCATION = new DeviceLocation(location.getLatitude(), location.getLongitude());
+                    weatherVM.initWeather(new DeviceLocation(location.getLatitude(), location.getLongitude()));
+                    forecastVM.initDailyWeatherForecast(new DeviceLocation(location.getLatitude(), location.getLongitude()));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1000) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                getLocationUpdates();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initUtils();
     }
 }

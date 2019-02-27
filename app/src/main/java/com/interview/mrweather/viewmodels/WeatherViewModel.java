@@ -26,19 +26,19 @@ public class WeatherViewModel extends ViewModel {
 
     private MutableLiveData<Weather> weatherMutableLiveData;
 
-    public LiveData<Weather> getWeather() {
+    public LiveData<Weather> getWeather(DeviceLocation deviceLocation) {
         if (weatherMutableLiveData == null) {
             weatherMutableLiveData = new MutableLiveData<>();
-            initWeather();
+            if (deviceLocation != null)
+                initWeather(deviceLocation);
         }
         return weatherMutableLiveData;
     }
 
-    public void initWeather() {
+    public void initWeather(DeviceLocation deviceLocation) {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient();
         }
-        DeviceLocation deviceLocation = new DeviceLocation("-26.061110", "28.101210");
         requestWeather(deviceLocation);
     }
 
@@ -51,6 +51,7 @@ public class WeatherViewModel extends ViewModel {
                     public void onFailure(Call call, IOException e) {
                         e.printStackTrace();
                     }
+
                     @Override
                     public void onResponse(Call call, final Response response) throws IOException {
                         if (!response.isSuccessful()) {

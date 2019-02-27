@@ -30,19 +30,19 @@ public class DailyForecastViewModel extends ViewModel {
 
     private MutableLiveData<List<DailyWeather>> dailyWeatherMutableLiveData;
 
-    public LiveData<List<DailyWeather>> getDailyWeatherForecast() {
+    public LiveData<List<DailyWeather>> getDailyWeatherForecast(DeviceLocation deviceLocation) {
         if (dailyWeatherMutableLiveData == null) {
             dailyWeatherMutableLiveData = new MutableLiveData<>();
-            initDailyWeatherForecast();
+            if (deviceLocation != null)
+                initDailyWeatherForecast(deviceLocation);
         }
         return dailyWeatherMutableLiveData;
     }
 
-    public void initDailyWeatherForecast() {
+    public void initDailyWeatherForecast(DeviceLocation deviceLocation) {
         if (okHttpClient == null) {
             okHttpClient = new OkHttpClient();
         }
-        DeviceLocation deviceLocation = new DeviceLocation("-26.061110", "28.101210");
         requestDailyWeatherForecast(deviceLocation);
     }
 
@@ -62,7 +62,7 @@ public class DailyForecastViewModel extends ViewModel {
                             throw new IOException("Unexpected code " + response);
                         } else {
                             String apiResponse = response.body().string();
-                            Log.i(TAG, "onResponse: "+apiResponse);
+                            Log.i(TAG, "onResponse: " + apiResponse);
                             List<DailyWeather> weatherList = new WeatherFactory().dailyForecast(apiResponse);
                             if (weatherList != null)
                                 dailyWeatherMutableLiveData.postValue(weatherList);
