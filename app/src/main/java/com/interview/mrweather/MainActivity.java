@@ -5,14 +5,18 @@ import android.animation.ValueAnimator;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,11 +70,28 @@ public class MainActivity extends AppCompatActivity {
 
         dailyWeatherList = new ArrayList<>();
         enableFullScreen();
+        init();
+    }
+
+    public void init() {
         if (isOnline()) {
             initUtils();
             initUIComponents();
             initViewModel();
             updateUI();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("No network, please ensure that your're connected to the internet")
+                    .setTitle("Connection");
+            builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent=new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 
@@ -166,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     // I have added animation for the main temperature textview
     public void updateMainTemperatureDisplay(String tmpString) {
         if (tmpString != null)
-            tvMainTemperature.setText(tmpString+"°");
+            tvMainTemperature.setText(tmpString + "°");
     }
 
     public void updateOtherViews(Weather weather) {
@@ -213,8 +234,10 @@ public class MainActivity extends AppCompatActivity {
 //                    Toast.makeText(MainActivity.this, "Location Changed", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onChanged:");
                     MainActivity.DEVICE_LOCATION = new DeviceLocation(location.getLatitude(), location.getLongitude());
-                    weatherVM.initWeather(new DeviceLocation(location.getLatitude(), location.getLongitude()));
-                    forecastVM.initDailyWeatherForecast(new DeviceLocation(location.getLatitude(), location.getLongitude()));
+                    if (weatherVM != null && forecastVM != null) {
+                        weatherVM.initWeather(new DeviceLocation(location.getLatitude(), location.getLongitude()));
+                        forecastVM.initDailyWeatherForecast(new DeviceLocation(location.getLatitude(), location.getLongitude()));
+                    }
                 }
             }
         });
@@ -233,6 +256,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initUtils();
+        init();
     }
 }

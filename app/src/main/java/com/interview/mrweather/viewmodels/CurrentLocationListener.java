@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 public class CurrentLocationListener extends LiveData<Location> {
 
+    private static final long UPDATES_INTERVAL = 1000 * 60;
+    private static final long FASTEST_UPDATE_INTERVAL = 1000 * 30;
     private static CurrentLocationListener instance;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
@@ -43,8 +45,8 @@ public class CurrentLocationListener extends LiveData<Location> {
 
     private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setInterval(UPDATES_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
