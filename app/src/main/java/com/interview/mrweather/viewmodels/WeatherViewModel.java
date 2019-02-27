@@ -58,6 +58,7 @@ public class WeatherViewModel extends ViewModel {
                             throw new IOException("Unexpected code " + response);
                         } else {
                             String apiResponse = response.body().string();
+                            Log.i(TAG, "onResponse: "+ apiResponse);
                             Weather weather = new WeatherFactory().extractWeatherInfo(apiResponse);
                             if (weather != null)
                                 weatherMutableLiveData.postValue(weather);

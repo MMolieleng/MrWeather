@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     Log.d(MainActivity.class.getSimpleName(),
                             "Location Changed " + location.getLatitude() + " : " + location.getLongitude());
-//                    Toast.makeText(MainActivity.this, "Location Changed", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onChanged:");
                     MainActivity.DEVICE_LOCATION = new DeviceLocation(location.getLatitude(), location.getLongitude());
                     if (weatherVM != null && forecastVM != null) {
