@@ -2,10 +2,7 @@
 
 Location based weather app. 
 
-## App Installation
-[1]https://github.com/MMolieleng/MrWeather/tree/master/app/release/app-release.apk "APK File"
-
-## Source code
+## Installation
 Clone the project using Android Studio 3.3.1(latest android studio version)
 
 
@@ -13,9 +10,15 @@ Clone the project using Android Studio 3.3.1(latest android studio version)
 1. [Lombok for android](https://projectlombok.org/setup/android)
 2. [Joda Time](https://github.com/dlew/joda-time-android) for date conversions and formatting
 3. [OkHttp3](https://github.com/square/okhttp) for API calls
-
+4. JUnit for unit testing
 
 ## Approach
+In this project I use MVVM design pattern to implement my solution. Because of limitted number of icon assets i was give, I used sun icon to indicate Sunny days and used partly cloudy icon to indicate rainy days in the forecast list.
+
+## Possible Improvements
+* Show user's location (city)
+* Display weather icons provided by the api using Glide or Picasso library
+* Add some animations to make the app fun to use
 
 ## Screenshots
 |![alt text](https://github.com/MMolieleng/MrWeather/blob/master/cloudy.jpeg) | ![alt text](https://github.com/MMolieleng/MrWeather/blob/master/rainy.jpeg) | 
